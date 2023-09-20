@@ -1,0 +1,248 @@
+.intern-row{
+    min-height: 10vh;
+    border: 1px solid rgb(186, 186, 186);
+    margin: 5px 0px;
+    /* background-color: aliceblue; */
+    border-radius: 20px;
+    padding: 20px 5px;
+}
+#detail-button{
+    width: 100%;
+}
+
+.allow-denial-buttons{
+    cursor: pointer;
+}
+
+.adminButtons,.sideButtons{
+    width: 100%;
+}
+
+.highlight-accept{
+    background-color: rgb(216 255 216);
+    border: 1px solid rgb(121 255 121);
+    box-shadow: 0px 0px 5px 0px #93ff93 ;
+    margin: 5px 0px 10px 0px;
+}
+.highlight-reject{
+    background-color: rgb(255 0 0 / 24%);
+    /* background-color: rgb(255 0 0 / 45%); */
+    border: 1px solid rgb(255 0 0 / 45%);
+}
+.highlight-default{
+    background-color: beige
+    
+}
+
+.assignTask-grandfather-container{
+    min-height: 100vh;
+    background-image: url('https://img.freepik.com/premium-vector/business-themed-seamless-background_6997-977.jpg');
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+}
+.mentorHomescreen-grandFather-container , .mentorAssignTask-grandfather-container{
+    max-width: calc(100vw - 10%); /* Subtract the width of the left panel */
+    margin-left: 15%; /* Add a margin equal to the width of the left panel */
+  }
+
+.mentorHomescreen-father-container{
+    max-width: 95vw;
+    width:  95vw;
+}
+
+.mentorHomescreen-col{
+    background-color: rgb(237, 237, 237);
+    min-height: 70vh;
+    margin: 0vw 2vw;
+    border-radius: 10px;
+}
+
+.idle-interns-heading{
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;  
+}
+
+.filterr{
+  position: absolute;
+  right: 1.5vw;
+  top: 1vh;
+  color: black;
+}
+
+.idleIntern-box{
+    min-height: 8vh;
+    background-color: white;
+    margin: 5px 0px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 0px #c4c4c4;
+    cursor: pointer;
+    display: flex;
+}
+
+#idle-employee-name{
+    padding: 5px 15px 5px 15px;
+}
+
+#idle-employee-right-part{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+#idle-employee-profile-pic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22%;
+}
+#idle-employee-college{
+    padding: 2px 15px 0px 15px;
+    font-size: 13px;
+}
+
+#idle-employee-assignTask{
+    display: flex;
+    justify-content: end;    
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.AiOutlinePlus{
+    font-size: 20px;
+    /* padding: 10px; */
+}
+.AiOutlinePlus:hover{
+    border-radius: 25px;
+    background-color: #c4c4c4;
+    transition: 0.3s background-color;
+
+}
+
+.assignTo-part{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+
+}
+
+#internListBoxContainer{
+    max-height: 62vh;
+    overflow-y: scroll;
+}
+
+/* For Webkit-based browsers */
+::-webkit-scrollbar {
+    width: 2px; /* Width of the scrollbar */
+  }
+  
+  /* Track (the background) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+  }
+  
+  /* Handle (the draggable part) */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(221, 221, 221); /* Color of the scrollbar handle */
+    border-radius: 6px; /* Rounded corners */
+  }
+  
+  /* On hover, the handle will have a different background */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  #mentorHomeScreen-leftPanel{
+    display: block;
+    background-color: #2c2c2c;
+    width: 15%;
+    position: fixed;
+    left: 0px;
+    height: 100vh;
+  }
+  
+  .sideMenu-button{
+    position: fixed;
+    left: 12%;
+    cursor: pointer;
+    font-size: 23px;
+    color: white;
+  }
+  .mentorHomeScreen-topbar{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 80vw;
+    width: 100%;
+  }
+  .mentorHomeScreen-topbar-father-container{
+    display: flex;
+    justify-content: center;    
+  }
+
+  .anotherContainer{
+    color: white;
+    margin-top: 6%;
+    font-size: 20px;
+    line-height: 220%;
+  }
+
+  .leftPanel-title {
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: none;
+    transition: border 2s ease-out; /* You can adjust the duration and timing function */
+  }
+  
+  .leftPanel-title:hover {
+    text-decoration: none;
+    border-bottom: 2px solid white;
+  }
+  
+  #notification-box{
+    flex-direction: column;
+    padding-bottom: 3%;
+  }
+
+  .dashboardTitle{
+    position: absolute;
+    top: 7vh;
+    left: 15%;
+  }
+
+  .mentorIntern-grandfather-container{
+    max-width: calc(100vw - 10%); /* Subtract the width of the left panel */
+    margin-left: 15%; /* Add a margin equal to the width of the left panel */
+    /* background-image: url('https://cdn.vectorstock.com/i/preview-1x/13/28/white-and-gray-checker-vector-6611328.jpg'); */
+    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/011/113/814/small_2x/aesthetic-grey-gingham-check-checkers-plaid-checkerboard-seamless-pattern-background-illustration-perfect-for-wallpaper-backdrop-postcard-background-banner-vector.jpg');
+  }
+  
+  .mentorIntern-fatherContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .mentorIntern-childContainer{
+    background-color: white;
+    min-height: 95vh;
+    border-radius: 25px;
+    padding: 22px;
+    width: 80vw;
+    box-shadow: 3px 5px 10px 0px #939393;
+  }
+
+  .assignTaskRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .linkhovered{
+    background-color: #acacac;
+  }
+
+  .dropdown-menu{
+    left: -9vw;
+  }

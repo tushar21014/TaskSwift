@@ -1,0 +1,73 @@
+
+.leftPanel{
+    color: white;
+    height: 100vh;
+    width: 30vw;
+    background-color: rgb(0 0 0 / 88%)
+}
+
+.internScreen{
+    display: flex;
+}
+
+.panelHeading{
+    /* border: 1px solid black; */
+    padding: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.panelHeading:hover{
+    background-color: #2e2e2ecc;
+}
+
+.datess{
+    padding: 10px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+.rightPanel{
+    width: 100%;
+    /* background-image: url('https://cdn.wallpapersafari.com/9/77/4udSek.jpg'); */
+    /* background-image: url(''); */
+
+    background-size: cover ;
+    background-repeat:no-repeat ;
+}
+.rightPanelContainer{
+    margin-top: 10vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+}
+
+.taskContainer{
+    width: 100%;
+    min-height: 20vh;
+    border: 2px solid black;
+    background: transparent;
+    /* filter: blur(10px); */
+    padding: 2vh 2vw;
+}
+
+.modal-dialog{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-content{
+    width: 70vw;
+}
+
+.leftPanel-Links:hover{
+    transition: 0.2s ease-in background-color;
+    background-color: #2e2e2ecc;
+}
