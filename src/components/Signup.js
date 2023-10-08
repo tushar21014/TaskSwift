@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import '../css/Signup.css'
 import "react-toastify/dist/ReactToastify.css" 
@@ -10,8 +10,21 @@ const Signup = () => {
     const [files, setFiles] = useState({
         file: null
     });
-    const navigate = useNavigate()
+    useEffect(() => {
+        fetchFields()
+        
+    }, [])
     
+    const navigate = useNavigate()
+    const [fields, setFields] = useState([])
+    const fetchFields = async() => {
+        const response = await fetch('http://localhost:5004/api/auth/fetchFields',{
+            method:"get"
+        })
+        const res = await response.json();
+        console.log(res);
+        setFields(res);
+    }
     const context = useContext(FirstContext);
     const { calltoast } = context;
     const handleFileUpload = (e) => {
@@ -63,7 +76,7 @@ const Signup = () => {
                 // setAlert({color:"success", message:"Form Submitted Successfully"})
                 // alert("Form Submitted Successfully")
                 console.log("Form Submitted Successfully")
-                calltoast("Signed up successfully", "success")
+                calltoast("Request Submitted!! Form under review", "success")
             }
 
 
@@ -207,10 +220,11 @@ const Signup = () => {
                         <div className="col">
                             <label htmlFor="exampleInputPassword1">Fields</label>
                             <select className="form-control" id="working_field" aria-describedby="working_field" name="working_field" onChange={handleChange} value={credentials.working_field} placeholder="Select Tech Field">
-                                <option value="">Fields</option>
-                                <option value="AI">AI</option>
-                                <option value="SD">SD</option>
-                                <option value="Web">Web Dev</option>
+                                {fields.map((e,index) => {
+                                    return <option value={e} key={index}>
+                                        {e}
+                                    </option>
+                                })}
                             </select>
                         </div>
                         <div className="col">
@@ -237,15 +251,15 @@ const Signup = () => {
                     </div>
                     <div className='row pl-4 mt-4 pr-4   '>
                         <div className="col ">
-                            <label htmlFor="exampleFormControlFile1">Upload Proposal File</label>
+                            <label htmlFor="exampleFormControlFile1">Upload Resume </label>
                             <input type="file" accept='.pdf' encType="multipart/form-data" required className="form-control-file" id="exampleFormControlFile1" name='uploadedResume' onChange={handleFileUpload}
                             />
                         </div>
-                    </div>
-                    <div className='row pl-4 mt-4 pr-4'>
-                        <div className="col h-10  flex justify-center align-items-center">
+                        <div className="col h-10 d-flex justify-content-center align-items-center">
                             <button type="primary" className="btn btn-primary">Submit</button>
                         </div>
+                    </div>
+                    <div className='row pl-4 mt-4 pr-4'>
                     </div>
 
 

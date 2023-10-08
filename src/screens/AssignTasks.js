@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Naviagtion from '../components/Navigation'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { AiOutlineClose } from 'react-icons/ai'
@@ -7,12 +6,16 @@ import LeftPanel from '../components/LeftPanel';
 import '../css/MentorScreen.css'
 import { ToastContainer } from 'react-toastify'
 import FirstContext from '../context/firstContext'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { MdOutlineUpdateDisabled } from 'react-icons/md'
 
 const AssignTasks = () => {
   const [show, setShow] = useState(false);
   const [secshow, setsecShow] = useState(false);
+  const [thirdShow, setThirdShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [temPid, setTemPid] = useState('')
+  const [thirdId, setThirdId] = useState('')
   const [secId, setSecId] = useState()
   const currentDate = new Date();
   const [internsList, setInternsList] = useState([])
@@ -20,7 +23,7 @@ const AssignTasks = () => {
   const [tasks, setTasks] = useState([])
   var count = 1;
   const context = useContext(FirstContext)
-  const {calltoast} = context
+  const { calltoast } = context
 
 
   function formatDate(dateString) {
@@ -68,12 +71,13 @@ const AssignTasks = () => {
 
   const handleClose = () => setShow(false);
   const handlesecClose = () => setsecShow(false);
+  const handlethirdClose = () => setThirdShow(false);
   const handleShow = () => setShow(true);
   const fetchInterns = async () => {
     try {
       let res = await fetch('http://localhost:5004/api/mentor/finalInterns', {
         method: "POST",
-        credentials:'include'
+        credentials: 'include'
       })
       const data = await res.json();
       console.log(data.user)
@@ -100,7 +104,7 @@ const AssignTasks = () => {
         const data = await res.json();
         console.log(data.taskss);
         setTasks(data.taskss);
-        
+
       } else {
         // Handle the case where the response is not okay (e.g., show an error message)
         console.error('Failed to fetch tasks');
@@ -108,6 +112,31 @@ const AssignTasks = () => {
     } catch (error) {
       console.error(error);
       // Handle the fetch error here (e.g., show an error message)
+    }
+  }
+
+  const disableAcc = async () => {
+    try {
+      const res = await fetch('http://localhost:5004/api/superuser/superuserDisableacc', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userid: thirdId }) // Assuming thirdId is a valid userId
+      });
+      if (res.ok) {
+        console.log("Account Disabled Successfully");
+        calltoast("Account disabled!", 'success');
+        const updatedList = internsList.filter((e) => e._id != thirdId);
+        setInternsList(updatedList);
+      } else {
+        console.error("Error disabling account");
+        calltoast('Error', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      calltoast('Error', 'error');
     }
   }
 
@@ -145,7 +174,7 @@ const AssignTasks = () => {
 
   return (
     <div className='assignTask-grandfather-container'>
-            <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
+      <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
       <LeftPanel />
 
       <Modal show={show} onHide={handleClose} backdrop="static">
@@ -224,14 +253,35 @@ const AssignTasks = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-            
+
+      <Modal show={thirdShow} onHide={handlethirdClose}>
+        <Modal.Header style={{ flexDirection: "row-reverse" }} > <span className='btn-close' onClick={handlethirdClose}><AiOutlineClose /></span>
+          <Modal.Title>Disable Account</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to disable user account?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handlethirdClose}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={() => { handlethirdClose(); disableAcc(); }}>
+            Disable
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <div className='mentorAssignTask-grandfather-container' id='mentorHomeScreen-rightPanel'>
 
         <div className="container assignTaskRow">
-          <div className="row">
+          <div className="row" style={{ width: '100%', overflowY: "scroll", height: '97vh' }}>
             {internsList.map((e) => (
-              <div key={e._id} className="col-lg-4 col-md-6 mb-4">
+              <div key={e._id} className="col-lg-4 col-4 col-md-6 mb-4">
                 <div className="card" style={{ width: "18rem" }}>
+                  <span className='threeDots' style={{ position: 'absolute', right: '1vw', top: '1vh' }}>
+                    <BsThreeDotsVertical className='dropdown-toggle' data-toggle='dropdown' />
+                    <div className="dropdown-menu">
+                      <div className="dropdown-item" style={{ color: "red", cursor:'pointer' }} onClick={() => { setThirdShow(true); setThirdId(e._id) }}><MdOutlineUpdateDisabled  /> Disable Account</div>
+                    </div>
+                  </span>
                   <div
                     className="imageContainer"
                     style={{

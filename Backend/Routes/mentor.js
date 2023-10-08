@@ -10,6 +10,9 @@ const fetchmentor = require('../middleware/fetchmentor');
 const Notification = require('../Models/Notification');
 const Mentor = require('../Models/Mentor');
 
+const moment = require('moment');
+
+
 router.post('/mentorGetinterns/:id?', async (req, res) => {
   const cookieValue = req.cookies.working_field; // Get the value of the 'working_field' cookie
   const userId = req.params.id; // Get the user ID from the URL parameter
@@ -114,7 +117,7 @@ router.post('/mentorCountreqapproved',fetchmentor, async (req, res) => {
 router.post('/finalInterns',fetchmentor, async (req, res) => {
   try {
     let mentorId = req.mentor;
-    let response = await User.find({ rejected: false, approval_director: true, approval_mentor: true, assigned_mentor: mentorId });
+    let response = await User.find({ rejected: false, approval_director: true, approval_mentor: true, assigned_mentor: mentorId, isExpired: false });
     res.json({ user: response })
   } catch (error) {
     console.log(error)
@@ -129,10 +132,16 @@ router.post('/mentorassignTask', fetchmentor, async (req, res) => {
     let mentorId = req.mentor;
     let id = req.body.tempid;
 
+    // Find the intern and update their taskAssigned field
     const intern = await User.findByIdAndUpdate(id, {
-      $inc: { taskAssigned: 1 }, // Increment taskAssigned by 1
+      $inc: { tasksAssigned: 1 }, 
+
       isFree: false // Set isFree to false
     });
+
+    if (!intern) {
+      return res.status(404).json({ message: "Intern not found" });
+    }
 
     let response = await Tasks.create({
       assigned_by: mentorId,
@@ -140,25 +149,25 @@ router.post('/mentorassignTask', fetchmentor, async (req, res) => {
       working_field: intern.working_field,
       task_description: req.body.task_desc,
       submission_by: actualDate
-    })
+    });
 
     if (response) {
-      res.json({ message: "Task Assigned Successfully" }).status(200)
-      console.log("Tassk Assigned Succesfully")
-      console.log("assigned to ", id);
-      console.log("assigned by " ,mentorId);
+      res.status(200).json({ message: "Task Assigned Successfully" });
+      console.log("Task Assigned Successfully");
+      console.log("Assigned to ", id);
+      console.log("Assigned by ", mentorId);
     }
   } catch (error) {
-    res.json({ message: "Task Assignment failed ", error: error })
-    console.log(error)
+    res.status(500).json({ message: "Task Assignment failed", error: error });
+    console.log(error);
   }
-})
+});
+
+
 
 router.post('/mentorFetchtask', fetchmentor, async (req, res) => {
   let mentorId = req.mentor;
   let intern = req.body.userId;
-  // console.log("assigned to ", intern)
-  // console.log("assigned by ", mentorId)
 
   try {
     let response = await Tasks.find({ assigned_to: intern, assigned_by: mentorId })
@@ -169,6 +178,108 @@ router.post('/mentorFetchtask', fetchmentor, async (req, res) => {
     res.json({ Messsage: error })
   }
 })
+
+
+router.get('/fetchTotalIdlePending', fetchmentor, async (req, res) => {
+  const mentorId = req.mentor;
+
+  try {
+    const idleresponse = await User.find({ assigned_mentor: mentorId, passChanged: true, rejected: false, isExpired: false,isFree:true });
+    
+    // Create an array of promises for each intern's pending tasks count
+    const pendingCounts = await Promise.all(idleresponse.map(async (intern) => {
+      const response = await Tasks.find({ assigned_to: intern, assigned_by: mentorId });
+      
+      const currentDate = moment();
+      const pendingTasksPassedDeadline = response.filter((task) => {
+        return !task.task_completed && moment(task.submission_by).isBefore(currentDate);
+      });
+      
+      return pendingTasksPassedDeadline.length;
+    }));
+
+    // Calculate the total pending tasks by summing up individual counts
+    const totalPending = pendingCounts;
+
+    res.json({ totalPending });
+  } catch (error) {
+    console.log(error);
+    res.json({ Message: error });
+  }
+});
+
+router.get('/fetchTotalBusyPending', fetchmentor, async (req, res) => {
+  const mentorId = req.mentor;
+
+  try {
+    const busyresponse = await User.find({ assigned_mentor: mentorId, passChanged: true, rejected: false, isExpired: false, isFree:false });
+    
+    // Create an array of promises for each intern's pending tasks count
+    const pendingCounts = await Promise.all(busyresponse.map(async (intern) => {
+      const response = await Tasks.find({ assigned_to: intern, assigned_by: mentorId });
+      
+      const currentDate = moment();
+      const pendingTasksPassedDeadline = response.filter((task) => {
+        return !task.task_completed && moment(task.submission_by).isBefore(currentDate);
+      });
+      
+      return pendingTasksPassedDeadline.length;
+    }));
+
+    // Calculate the total pending tasks by summing up individual counts
+    const totalPending = pendingCounts;
+
+    res.json({ totalPending });
+  } catch (error) {
+    console.log(error);
+    res.json({ Message: error });
+  }
+});
+
+router.get('/mentorFreeUser', fetchmentor, async (req, res) => {
+  const mentorId = req.mentor;
+  try {
+    const idleresponse = await User.find({
+      assigned_mentor: mentorId,
+      passChanged: true,
+      rejected: false,
+      isExpired: false
+    });
+
+    // Create an array of promises to find the latest document for each intern
+    const latestDocuments = await Promise.all(idleresponse.map(async (intern) => {
+      try {
+        const response = await Tasks.findOne(
+          { assigned_to: intern, assigned_by: mentorId },
+          {},
+          { sort: { 'createdAt': -1 } }
+        ).lean();
+    
+        console.log("Response for intern", intern._id, ":", response);
+    
+        const currentDate = moment();
+        const pendingTasksPassedDeadline = !response.task_completed &&
+          moment(response.submission_by).isBefore(currentDate);
+
+          if (pendingTasksPassedDeadline ){
+            await User.updateOne({ _id: intern._id }, { isFree: true });
+          }
+    
+        return { internId: intern._id, pending: pendingTasksPassedDeadline };
+      } catch (error) {
+        console.error("Error fetching tasks for intern", intern._id, ":", error);
+        return { internId: intern._id, pending: false };
+      }
+    }));    
+
+
+    res.json({ response: latestDocuments });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ Message: error });
+  }
+});
+
 
 
 router.post('/mentorAlertintern', fetchmentor, async (req, res) => {
@@ -199,7 +310,7 @@ router.post('/mentorGetidleinterns', fetchmentor, async (req, res) => {
   let mentorId = req.mentor
   try {
     let idleresponse = await User.find({ assigned_mentor: mentorId, isFree: true, passChanged:true, rejected:false,isExpired:false });
-    let engagedresponse = await User.find({ assigned_mentor: mentorId, isFree: false,rejected:false,passChanged:true });
+    let engagedresponse = await User.find({ assigned_mentor: mentorId, isFree: false,rejected:false,passChanged:true,isExpired:false });
     let mentorNotification = await Mentor.findOne({ _id: mentorId }).select('notifications');
     const finalResponse = {
       idleresponse,
@@ -307,7 +418,7 @@ router.put('/mentorDeleteNotification', fetchmentor, async (req, res) => {
   }
 });
 
-router.put('/mentorDisableinternacc', fetchmentor, async(req,res) => {
+router.put('/mentorDisableinternacc' , async(req,res) => {
   let userId = req.body.userId;
   try {
     const userDetails = await User.findByIdAndUpdate(userId,{isExpired:true});
@@ -316,5 +427,7 @@ router.put('/mentorDisableinternacc', fetchmentor, async(req,res) => {
     console.log(error);
   }
 })
+
+
 
 module.exports = router;

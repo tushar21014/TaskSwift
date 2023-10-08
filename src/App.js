@@ -17,6 +17,7 @@ import MentorHomescreen from './screens/MentorHomescreen';
 import Superuser from './components/Superuser';
 import SuperuserManageusers from './screens/SuperuserManageusers';
 import Superuserdashboard from './screens/Superuserdashboard';
+import SuperuserDepartment from './screens/SuperuserDepartment';
 
 
 
@@ -36,6 +37,7 @@ function App() {
     <Route exact path='/MentorHomescreen' element={<MentorHomescreen/>}></Route>
     <Route exact path='/Superuser' element={<Superuserdashboard/>}></Route>
     <Route exact path='/Managerusers' element={<SuperuserManageusers/>}></Route>
+    <Route exact path='/department' element={<SuperuserDepartment/>}></Route>
 
     {/* <Route exact path='/UserPanel' element={<UserPanel />}></Route>
     <Route exact path='/Viewpastuploads' element={<Viewpastuploads />}></Route>

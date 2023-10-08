@@ -189,10 +189,8 @@ router.get('/superuserFetchoverview', async (req, res) => {
 
         const numberofusers = await user.find({ rejected: false }).countDocuments();
         const numberofmentor = await mentor.countDocuments();
-        const numberofdirector = await director.countDocuments();
         const ans = {
             userss: numberofusers,
-            directorr: numberofdirector,
             mentorr: numberofmentor
         }
         res.json(ans);
@@ -200,4 +198,102 @@ router.get('/superuserFetchoverview', async (req, res) => {
         console.log(error);
     }
 })
+
+router.get('/superuserFetchActiveinterns', async (req, res) => {
+    try {
+
+        const active = await user.find({ rejected: false, isExpired: false }).countDocuments();
+        const inactive = await user.find({ rejected: false, isExpired: true }).countDocuments();
+        const ans = {
+            activeuserss: active,
+            inactiveuserss: inactive
+        }
+        res.json(ans);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+router.get('/superuserFetchUserWorkingFields', async (req, res) => {
+    try {
+        const workingFields = await user.aggregate([
+            // Filter users who are not rejected or not expired
+            {
+                $match: {
+                    $and: [
+                        { rejected: { $ne: true } }, // User is not rejected
+                        { isExpired: { $ne: true } } // User is not expired
+                    ]
+                }
+            },
+            { $group: { _id: '$working_field', count: { $sum: 1 } } },
+        ]);
+
+        // Create the dynamic dataset based on the workingFields array
+        const dataset = {
+            labels: [],
+            data: [],
+            backgroundColor: ['#FF6384', '#FFCE56', "#96f", '#ff9f40'], // You can customize colors here
+            links: [], // Initialize an empty array for links
+        };
+
+        workingFields.forEach((field) => {
+            dataset.labels.push(`${field._id}`);
+            dataset.data.push(field.count);
+            dataset.links.push(`Intern${field._id}`); // Add dynamic links
+        });
+
+        const internsubChartData = {
+            labels: dataset.labels,
+            datasets: [
+                {
+                    data: dataset.data,
+                    backgroundColor: dataset.backgroundColor,
+                    links: dataset.links, // Assign the links to the dataset
+                },
+            ],
+        };
+
+        res.json(internsubChartData);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+router.get('/superuserFetchDifferentMentorFields', async (req, res) => {
+    try {
+        const mentorFields = await mentor.aggregate([
+            {
+                $group: {
+                    _id: '$working_field',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        res.json(mentorFields);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.put('/superuserDisableacc', async (req, res) => {
+    const userId = req.body.userid; // Assuming you're sending 'userid' in the request body
+    try {
+        const response = await user.findByIdAndUpdate(userId, { isExpired: true });
+        if (response) {
+            console.log("Account disabled successfully");
+            res.json({ message: 'account disabled successfully' });
+        } else {
+            console.log("User not found");
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 module.exports = router;

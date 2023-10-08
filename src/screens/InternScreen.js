@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import "../css/Internscreen.css"
 import { BsList } from "react-icons/bs"
-import {IoMdDoneAll} from 'react-icons/io'
-import {FiClock} from 'react-icons/fi'
+import { IoMdDoneAll } from 'react-icons/io'
+import { FiClock } from 'react-icons/fi'
+import {AiOutlineClose} from 'react-icons/ai'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FirstContext from '../context/firstContext'
 import { ToastContainer } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const InternScreen = () => {
 
@@ -15,6 +17,7 @@ const InternScreen = () => {
     return () => {
     }
   }, [])
+  const navigate = useNavigate();
 
   const [pendingTasks, setPendingTasks] = useState([])
   const [submittedTasks, setSubmittedTasks] = useState([])
@@ -26,22 +29,22 @@ const InternScreen = () => {
   const [id, setId] = useState()
   const [flag, setFlag] = useState('')
   const context = useContext(FirstContext);
-  const {calltoast} = context;
-  
+  const { calltoast } = context;
+
   function formatDate(dateString) {
     const dateObject = new Date(dateString);
     const day = dateObject.getDate();
     const month = dateObject.getMonth() + 1; // Note: Month is zero-based, so add 1
     const year = dateObject.getFullYear() % 100; // Get the last two digits of the year
-  
+
     // Ensure day and month are zero-padded to two digits
     const formattedDay = String(day).padStart(2, '0');
     const formattedMonth = String(month).padStart(2, '0');
     const formattedYear = String(year).padStart(2, '0');
-  
+
     return `${formattedDay}/${formattedMonth}/${formattedYear}`;
   }
-  
+
 
   const handlePendingClick = () => {
     setSelectedSection("Pending");
@@ -58,6 +61,22 @@ const InternScreen = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
+  const handleLogout = async () => {
+    try {
+        const response = await fetch('http://localhost:5004/api/auth/clearCookies', {
+            method: "GET",
+            credentials: 'include'
+        })
+        if (response.ok) {
+            calltoast("Logged Out Successfully", "success");
+            navigate('/Login');
+        }
+    } catch (error) {
+        console.error();
+    }
+
+}
 
 
   const fetchSingleTask = async (id) => {
@@ -116,9 +135,9 @@ const InternScreen = () => {
       if (response.ok) {
         // Handle success here (e.g., show a success message)
         // alert('Task Submitted Successfully');
-        calltoast("Task Submitted Successfully","success");
+        calltoast("Task Submitted Successfully", "success");
         setDescc('')
-        fetchTasks();        
+        fetchTasks();
         // window.location.reload();
       } else {
         // Handle failure (e.g., show an error message)
@@ -144,7 +163,7 @@ const InternScreen = () => {
         theme="colored"
       />
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+      <Modal.Header style={{ flexDirection: "row-reverse" }} > <span className='btn-close' onClick={handleClose}><AiOutlineClose /></span>
           <Modal.Title>Submit Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -161,7 +180,7 @@ const InternScreen = () => {
         </Modal.Footer>
       </Modal>
       <div className='leftPanel'>
-        <div className='row leftPanelRow' style={{borderBottom: "1px solid white", justifyContent:"space-evenly"}}>
+        <div className='row leftPanelRow' style={{ borderBottom: "1px solid white", justifyContent: "space-evenly" }}>
           <div className={`col-3 panelHeading ${selectedSection === "Pending" ? "selected" : ""} justify-content-right`} onClick={handlePendingClick}>
             Pending
           </div>
@@ -171,6 +190,7 @@ const InternScreen = () => {
           <div className={`col-3 panelHeading ${selectedSection === "Overdue" ? "selected" : ""} justify-content-left`} onClick={handleOverdueClick}>
             Overdue
           </div>
+        
         </div>
         <div className='datess'>
 
@@ -179,7 +199,7 @@ const InternScreen = () => {
               <div>Wait for your mentor to assign you task</div>
             ) : (
               pendingTasks.map((task) => (
-                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id);setFlag('pending') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop:"22px" }} key={task._id}><BsList className='mr-4' />{formatDate(task.assigned_on)}</div>
+                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id); setFlag('pending') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop: "22px" }} key={task._id}><BsList className='mr-4' />{formatDate(task.assigned_on)}</div>
               ))
             )
           )}
@@ -189,7 +209,7 @@ const InternScreen = () => {
               <div>There are no submissions yet.</div>
             ) : (
               submittedTasks.slice().reverse().map((task) => (
-                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id);setFlag('submitted') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop:"22px" }} key={task._id}><IoMdDoneAll className='mr-4' />{formatDate(task.submission_on)}</div>
+                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id); setFlag('submitted') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop: "22px" }} key={task._id}><IoMdDoneAll className='mr-4' />{formatDate(task.submission_on)}</div>
               ))
             )
           )}
@@ -199,14 +219,17 @@ const InternScreen = () => {
               <div>There are no overdue tasks.</div>
             ) : (
               overdueTasks.map((task) => (
-                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id);setFlag('pending') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop:"22px" }} key={task._id}><FiClock className='mr-4' />{formatDate(task.assigned_on)}</div>
+                <div className='leftPanel-Links' onClick={() => { fetchSingleTask(task._id); setFlag('pending') }} style={{ cursor: "pointer", justifyContent: "start", display: "flex", alignItems: "center", width: '100%', borderBottom: "0.5px solid #6b6767", paddingBottom: "10px", paddingTop: "22px" }} key={task._id}><FiClock className='mr-4' />{formatDate(task.assigned_on)}</div>
               ))
             )
           )}
         </div>
+        <div className='logOut' onClick={handleLogout} style={{position:'absolute',bottom:'0px',height:'6%',width:"23%", textAlign:'center', cursor:'pointer'}}> 
+        Log Out
+        </div>
       </div>
       <div className='rightPanel'>
-        <div className={`rightPanelContainer container ${flag==='pending'?"":"d-none"}`}>
+        <div className={`rightPanelContainer container ${flag === 'pending' ? "" : "d-none"}`}>
           <div className={`taskDetails h1 text-center `} >Task Details</div>
 
           <div className='taskContainer'>
@@ -217,7 +240,7 @@ const InternScreen = () => {
 
           </div>
           <div className='row d-flex align-items-center'>
-            <div className={`col dedline my-4 ${(flag === 'pending') ? "" :'d-none'}`}>
+            <div className={`col dedline my-4 ${(flag === 'pending') ? "" : 'd-none'}`}>
               Deadline:
               {formatDate(singleTask.submission_by)}
               {/* {singleTask.submission_by} */}
@@ -227,7 +250,7 @@ const InternScreen = () => {
             </div>
           </div>
         </div>
-        <div className={`rightPanelContainer container ${flag==='submitted'?"":"d-none"}`}>
+        <div className={`rightPanelContainer container ${flag === 'submitted' ? "" : "d-none"}`}>
           <div className={`taskDetails h1 text-center `} >Task Details</div>
 
           <div className='taskContainer'>
@@ -237,7 +260,7 @@ const InternScreen = () => {
           </div>
 
           <div className='row d-flex align-items-center'>
-            <div className={`col dedline my-4 ${flag === 'submitted' ? "" :'d-none'}`}>
+            <div className={`col dedline my-4 ${flag === 'submitted' ? "" : 'd-none'}`}>
               Deadline:
               {formatDate(singleTask.submission_by)}
               {/* {singleTask.submission_by} */}

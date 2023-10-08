@@ -15,7 +15,7 @@ const Naviagtion = () => {
   return (
     <div style={{'overflowX':"hidden"}}>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link className="navbar-brand mx-4" >JIRA</Link>
+        <Link className="navbar-brand mx-4" >CDAC</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -27,17 +27,7 @@ const Naviagtion = () => {
             </li> */}
             {Cookies.get("role") === "director" ? (
               <>
-            <li className={`nav-item ${location.pathname === "/Home" ? "active" : ""}`}>
-              <Link className="nav-link" >Home</Link>
-            </li>
-            
-            <li className={`nav-item ${location.pathname === "/Home" ? "active" : ""}`}>
-                  <Link className="nav-link">Mentors</Link>
-                </li>
-                <li className={`nav-item ${location.pathname === "/Director" ? "active" : ""}`}>
-                  <Link to='/Director'className="nav-link">Interns</Link>
-                </li>
-                <li style={{ display: "flex", width: "75vw", justifyContent: "end" }}>
+                <li style={{ display: "flex", width: "90vw", justifyContent: "end" }}>
                   <button onClick={handleLogout} className="btn btn-danger">
                     LogOut
                   </button>
@@ -82,12 +72,6 @@ const Naviagtion = () => {
               <li className="nav-item active">
               <Link className="nav-link" >Home</Link>
             </li>
-            
-                <li className="nav-item">
-                  <Link className="nav-link">
-                    You are a intern
-                  </Link>
-                </li>
                 <li style={{ display: "flex", width: "75vw", justifyContent: "end" }}>
                   <button onClick={handleLogout} className="btn btn-danger">
                     LogOut

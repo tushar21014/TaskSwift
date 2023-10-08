@@ -26,7 +26,8 @@ const MentorHomescreen = () => {
   const [thirdShow, setThirdShow] = useState(false);  //create to do list modal
   const [forthShow, setForthshow] = useState(false);  // preview to do list modal
   const [fifthShow, setFifthshow] = useState(false);  //  to disablel acc
-
+  const [totalIdlePendingTasks, setTotalIdlePendingTasks] = useState([])
+  const [totalBusyPendingTasks, setTotalBusyPendingTasks] = useState([])
   const [tempName, setTempName] = useState('')
 
   const [secId, setSecId] = useState()
@@ -70,14 +71,19 @@ const MentorHomescreen = () => {
   }
 
   useEffect(() => {
+    // fetchPendingTasks(idleInterns.userr)
     AOS.init({ duration: 1000, });
     fetchIdleinterns();
     fetchTodolist();
+    fetchPendingidleTasks();
+    fetchPendingbusyTasks();
+    fetchInternUpdates();
     document.getElementById('sideMenu-button').click();
 
   }, [])
 
   useEffect(() => {
+    
     // Call fetchTasks when secId changes
     if (secId) {
       fetchTasks();
@@ -156,6 +162,19 @@ const MentorHomescreen = () => {
   };
 
 
+  const fetchInternUpdates = async() => {
+    const response = await fetch(`${mentorURL}/mentorFreeuser`,{
+      method:"GET",
+      credentials:'include'
+    })
+    if(response.ok)
+    {
+      console.log('successfully');
+    }
+    else{
+      console.log('error');
+    }
+  }
   const fetchIdleinterns = async () => {
     try {
       const response = await fetch(`${mentorURL}/mentorGetidleinterns`, {
@@ -346,6 +365,49 @@ const MentorHomescreen = () => {
     }
   }
 
+  const fetchPendingidleTasks = async () => {
+    try {
+      let res = await fetch(`${mentorURL}/fetchTotalIdlePending`, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("idle Pending tasks ", data);
+        setTotalIdlePendingTasks(data.totalPending)
+      } else {
+        console.error('Failed to fetch to do tasks');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const fetchPendingbusyTasks = async () => {
+    try {
+      let res = await fetch(`${mentorURL}/fetchTotalBusyPending`, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Busy Pending tasks ", data);
+        setTotalBusyPendingTasks(data.totalPending)
+      } else {
+        console.error('Failed to fetch to do tasks');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div>
       <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
@@ -434,13 +496,11 @@ const MentorHomescreen = () => {
         <Modal.Header style={{ flexDirection: "row-reverse" }} > <span className='btn-close' onClick={handlethirdClose}><AiOutlineClose /></span>
           <Modal.Title>Create To Do Task</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <form>
+        <form onSubmit={createTodotask}>
+          <Modal.Body>
             <textarea placeholder='Write a brief description of task...' value={descc} required onChange={(e) => setDescc(e.target.value)} className='p-2' style={{ width: "100%", minHeight: "20vh" }}></textarea>
             <textarea placeholder='Create a review note ... ' value={reviewNote} required onChange={(e) => setReviewNote(e.target.value)} className='p-2' style={{ width: "100%", minHeight: "10vh" }}></textarea>
-            {/* Submission by: <input type='date' value={selectedDate} onChange={handleDateChange} required min={currentDate.toISOString().split('T')[0]} /> */}
-          </form>
-        </Modal.Body>
+          </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => { handlethirdClose() }}>
             Close
@@ -449,6 +509,7 @@ const MentorHomescreen = () => {
             Create
           </Button>
         </Modal.Footer>
+        </form>
       </Modal>
 
       <Modal show={forthShow} onHide={handleforthClose}>
@@ -516,9 +577,6 @@ const MentorHomescreen = () => {
         </Modal.Footer>
       </Modal>
 
-
-
-
       <div>
 
         <LeftPanel />
@@ -545,6 +603,7 @@ const MentorHomescreen = () => {
                   <div className='col mentorHomescreen-col' data-aos='fade-up'>
                     <div className='idle-interns-heading'>TO DO LIST ({todoList.length})</div>
                     <div className='idleIntern-box d-flex justify-content-center align-items-center' onClick={() => { setThirdShow(true); }}>
+                      
                       <AiOutlinePlus />
                     </div>
 
@@ -552,7 +611,7 @@ const MentorHomescreen = () => {
                       <div className='internListBoxContainer'>
                         {todoList.map((e) => {
                           return <div key={e._id} className='idleIntern-box d-flex align-items-center' style={{ justifyContent: "space-between" }}>
-                            <div id='idle-employee-name' onClick={() => { setFilteredArray(todoList.filter((item) => item._id === e._id)); setForthshow(true); }} >{e.remarks}</div>
+                            <div id='idle-employee-name' onClick={() => { setFilteredArray(todoList.filter((item) => item._id === e._id)); setForthshow(true); }} style={{ width: '100%' }}>{e.remarks}</div>
                             <span className='removeTodoTask' onClick={async () => { setFilteredArray(todoList.filter((item) => item._id === e._id)); await DeleteTodoList(); }} style={{ marginRight: "15px" }}><BiSolidTrashAlt /></span>
                           </div>
                         })}
@@ -561,6 +620,10 @@ const MentorHomescreen = () => {
                   </div>
                   <div className='col mentorHomescreen-col' data-aos='fade-up' data-aos-delay='50'>
                     <div className='idle-interns-heading'>IDLE INTERNS ({idleInterns.length})</div>
+                    {busyInterns.length === 0 ? <>
+                      <div className='pl-3'>No Idle interns</div>
+                    </> : <>
+                    {/* </>} */}
                     {idleInterns && (
                       <div id='internListBoxContainer'>
                         <div
@@ -575,21 +638,25 @@ const MentorHomescreen = () => {
                         >
                         </div>
 
-                        {idleInterns.map((e) => {
+                        {idleInterns.map((e,index) => {
                           return <div key={e._id} className='idleIntern-box'>
                             <div id='idle-employee-profile-pic'><span><CgProfile /></span></div>
-                            <div id='idle-employee-right-part'>
+                            <div id='idle-employee-right-part' style={{position:'relative'}}>
+                            <span className="badge badge-danger" data-toggle="tooltip" data-placement="top" title="Pending Tasks" style={{position:'absolute',right:'-10%', top: "-2%"}}>
+                                {totalIdlePendingTasks? totalIdlePendingTasks[index] : "NA"}
+                              </span>
                               <div id='idle-employee-name'>{e.first_name} {e.last_name}</div>
                               <div id='idle-employee-college'><p>{e.college}</p></div>
-                              <div id='idle-employee-assignTask'><AiOutlinePlus
+                              <div id='idle-employee-assignTask'><AiOutlinePlus data-toggle="tooltip" data-placement="top" title="Assign Task"
                                 onClick={() => { handleShow(); setTemPid(e._id); }} className='AiOutlinePlus' />
-                                <AiFillDelete style={{ marginLeft: '1vw' }} onClick={() => { setDisabledAccid(e._id); setFifthshow(true) }} /></div>
+                                <AiFillDelete style={{ marginLeft: '1vw',fontSize:'18px' }} className='AiOutlinePlus'  onClick={() => { setDisabledAccid(e._id); setFifthshow(true) }} data-toggle="tooltip" data-placement="top" title="Disable Account" /></div>
                             </div>
 
                           </div>
                         })}
                       </div>
                     )}
+                    </>}
                   </div>
                   <div className='col mentorHomescreen-col' data-aos='fade-up' data-aos-delay='150'>
                     <div className='idle-interns-heading'>BUSY INTERNS ({busyInterns.length})</div>
@@ -600,14 +667,22 @@ const MentorHomescreen = () => {
                         <div className='internListBoxContainer'>
                           {busyInterns.map((e, index) => {
                             return <div key={e._id} className='idleIntern-box'>
+                              
                               <div id='idle-employee-profile-pic'><span><CgProfile /></span></div>
-                              <div id='idle-employee-right-part'>
+                              <div id='idle-employee-right-part'
+                              style={{
+                                position: "relative"
+                              }}
+                              >
+                              <span className="badge badge-danger" data-toggle="tooltip" data-placement="top" title="Pending Tasks" style={{position:'absolute',right:'-14%', top: "-2%"}}>
+                                {totalBusyPendingTasks? totalBusyPendingTasks[index] : "NA"}
+                              </span>
                                 <div id='idle-employee-name'>{e.first_name} {e.last_name}</div>
                                 <div id='idle-employee-college'><p>{e.college}</p></div>
                                 {/* {console.log} */}
                                 {/* {calculateDateDifference("2023-09-01T00:00:00.000Z")} */}
                                 {/* <p>{calculateDays[index]}</p> */}
-                                <div id='idle-employee-assignTask'><AiOutlineEye onClick={() => { setsecShow(true); setSecId(e._id); }} className='AiOutlinePlus' /></div>
+                                <div id='idle-employee-assignTask'><AiOutlineEye onClick={() => { setsecShow(true); setSecId(e._id); }} className='AiOutlinePlus' data-toggle="tooltip" data-placement="top" title="Preview Taska" /></div>
                               </div>
 
                             </div>

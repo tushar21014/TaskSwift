@@ -4,7 +4,7 @@ import '../css/MentorScreen.css'
 import { MdGroupAdd } from 'react-icons/md'
 import { BsList } from 'react-icons/bs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AiOutlinePoweroff } from 'react-icons/ai'
+import { AiOutlinePoweroff , AiOutlinePlus} from 'react-icons/ai'
 import FirstContext from '../context/firstContext'
 import Cookies from 'js-cookie'
 
@@ -108,14 +108,21 @@ const LeftPanel = () => {
                     <Link to='/Managerusers' style={{ textDecoration: "none", color: "white" }}>
                         <div className='leftPanel-logo'><BiSolidUserBadge /></div>
                     </Link>
+                    <Link to='/department' style={{ textDecoration: "none", color: "white" }}>
+                        <div className='leftPanel-logo'><AiOutlinePlus /></div>
+                    </Link>
                     <div className='leftPanel-logo' style={{ position: "absolute", top: "84vh" }} ><AiOutlinePoweroff /></div>
                 </div>
                 <div className='col-8'>
                     <Link to='/Superuser' style={{ textDecoration: "none", color: "white" }}>
                         <div className='leftPanel-title' id='leftPanel-title'>Dashboard</div>
                     </Link>
+
                     <Link to='/Managerusers' style={{ textDecoration: "none", color: "white" }}>
                         <div className='leftPanel-title' id='leftPanel-title' >Manage Users</div>
+                    </Link>
+                    <Link to='/department' style={{ textDecoration: "none", color: "white" }}>
+                        <div className='leftPanel-title' id='leftPanel-title' >Department</div>
                     </Link>
                     <div className='leftPanel-title' onClick={handleLogout} style={{ position: "absolute", top: "84vh" }} id='leftPanel-title'>LogOut</div>
                 </div>

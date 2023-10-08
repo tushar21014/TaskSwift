@@ -232,7 +232,7 @@ const DirectorInternScreen = () => {
         </Modal.Footer>
       </Modal>
       <div>
-        <Navigation />
+        {/* <Navigation /> */}
       </div>
       <div className='container my-4'>
         {loading ? (

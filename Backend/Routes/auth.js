@@ -120,48 +120,41 @@ router.post('/createuser', upload.single('uploadedResume'), [
 
 
 // Route to create a mentor for specific working_field
-router.post('/creatementor', [
-  body('email', 'Please enter a valid email').isEmail(),
-  // body('phone').isMobilePhone,
-], async (req, res) => {
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(402).json({ errors: errors.array() });
-    console.log({ errors })
-  }
-
-  const saltRounds = await bcrypt.genSalt(10);
-  let secPass = await bcrypt.hash(req.body.pass, saltRounds)
-  const directorIds = await director.distinct('_id');
-  // console.log(directorIds)
+router.post('/creatementor',async (req, res) => {
   try {
+    const {credentials} = req.body
+    // console.log(credentials)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(402).json({ errors: errors.array() });
+    }
+    const saltRounds = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(credentials.pass, saltRounds);
+    console.log(hashedPass)
+
+    const directorIds = await director.distinct('_id');
     await Mentor.create({
       assigned_director: directorIds,
-      working_field: req.body.working_field,
-      salutation: req.body.salutation,
-      first_name: req.body.first_name,
-      middle_name: req.body.middle_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      pass: secPass,
-      phone: req.body.phone,
-      address1: req.body.address1,
-      address2: req.body.address2,
-      city: req.body.city,
-      zipCode: req.body.zipCode,
-      state: req.body.state,
-    })
+      working_field: credentials.working_field,
+      salutation: credentials.salutation,
+      first_name: credentials.first_name,
+      middle_name: credentials.middle_name,
+      last_name: credentials.last_name,
+      email: credentials.email,
+      pass: hashedPass, // Use the hashed password
+      phone: credentials.phone,
+      address1: credentials.address1,
+      address2: credentials.address2,
+      city: credentials.city,
+      zipCode: credentials.zipCode,
+      state: credentials.state,
+    });
 
-    res.json({ success: true })
-    console.log("Mentor Account Created")
-
-
+    res.json({ success: true });
   } catch (error) {
-    console.log(error)
-    res.json({ success: false })
+    console.error(error);
+    res.status(500).json({ success: false, message: 'An error occurred' });
   }
-
 });
 
 router.post('/createDirector', [
@@ -507,6 +500,16 @@ router.get('/clearCookies', (req, res) => {
     res.json({message: 'All cookies have been cleared.'});
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get('/fetchFields', async (req, res) => {
+  try {
+    const workingFields = await Mentor.distinct('working_field');
+    res.json(workingFields).status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

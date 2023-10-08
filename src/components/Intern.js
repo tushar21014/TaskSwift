@@ -33,7 +33,7 @@ const Intern = () => {
   return (
     <div>
       <div>
-        <Naviagtion/>
+        {/* <Naviagtion/> */}
       </div>
       <div>
         {isLoading ? (
