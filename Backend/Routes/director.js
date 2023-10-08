@@ -70,8 +70,8 @@ router.put('/directorAcceptintern', async (req, res) => {
             port: 587,
             secure: false,
             auth: {
-                user: 'tg21014@gmail.com',
-                pass: 'zledunxbgapjexhc'
+                user: 'cdac@gmail.com',
+                pass: 'your password'
             }
         });
 
