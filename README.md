@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# CDAC Intern Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Description
 
-## Available Scripts
+The CDAC Intern Management System is a web application built using the MERN (MongoDB, Express, React, Node.js) stack. It is designed to facilitate the management of interns by Mentors, Directors, and Superusers. The system allows authorized users to:
 
-In the project directory, you can run:
+- Create and manage mentor, director, and superuser accounts.
+- Add, edit, and view intern profiles.
+- Assign mentors and directors to interns.
+- Track and manage intern tasks and assignments.
+- Monitor intern progress and performance.
+- Generate reports and statistics on intern activities.
 
-### `npm start`
+This system provides a centralized platform for efficient communication and coordination between mentors, directors, and interns, making intern management more streamlined and organized.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Before running the CDAC Intern Management System, ensure you have the following software and tools installed:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js and npm (Node Package Manager)
+- MongoDB
+- Git
 
-### `npm run build`
+### Backend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   git clone https://github.com/your-username/cdac-intern-management-system.git
+   cd cdac-intern-management-system
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Navigate to the backend directory:
 
-### `npm run eject`
+   ```bash
+   cd backend
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install backend dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. Set up environment variables:
+   - Create a `.env` file in the `backend` directory.
+   - Add necessary environment variables such as database connection URL, JWT secret, etc.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+5. Start the backend server:
 
-## Learn More
+   ```bash
+   npm start
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Frontend Setup
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Navigate to the frontend directory:
 
-### Code Splitting
+   ```bash
+   cd ../frontend
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. Install frontend dependencies:
 
-### Analyzing the Bundle Size
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+3. Start the frontend development server:
 
-### Making a Progressive Web App
+   ```bash
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Usage
 
-### Advanced Configuration
+1. Access the application in your web browser by navigating to `http://localhost:3000` (or the specified frontend port).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+2. Log in with your credentials as a Mentor, Director, or Superuser.
 
-### Deployment
+3. Begin managing interns, assigning tasks, and monitoring their progress.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contributing
 
-### `npm run build` fails to minify
+Contributions to the CDAC Intern Management System are welcome. Please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgments
+
+- This project was developed as part of the CDAC internship program.
+- Special thanks to the mentors, directors, and interns who provided valuable feedback and support.
+
+---
+
+Feel free to customize this README to suit your project's specific details and requirements. Additionally, you can include information about API endpoints, project structure, deployment instructions, and any other relevant details to help users understand and use your system effectively.
