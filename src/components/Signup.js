@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
 import '../css/Signup.css'
 import "react-toastify/dist/ReactToastify.css" 
 import FirstContext from '../context/firstContext'
 import { ToastContainer } from 'react-toastify'
 
 const Signup = () => {
-    const [credentials, setCredentials] = useState({ salutation: "", first_name: "", middle_name: "", last_name: "", college: "", email: "", phone: "", e_rollno: "", address1: "", address2: "", city: "", zipCode: "", state: "", year: "", sem: "", course: "", working_field: "", specialization: "",internshipPeriod:"" });
+    const [credentials, setCredentials] = useState({ salutation: "", first_name: "", middle_name: "", last_name: "", college: "", email: "", phone: "", e_rollno: "", address1: "", address2: "", city: "", zipCode: "", state: "", year: "", sem: "", course: "", working_field: "", specialization: "",internshipPeriod:"", starting_date:"" });
     const [files, setFiles] = useState({
         file: null
     });
@@ -15,7 +14,6 @@ const Signup = () => {
         
     }, [])
     
-    const navigate = useNavigate()
     const [fields, setFields] = useState([])
     const fetchFields = async() => {
         const response = await fetch('http://localhost:5004/api/auth/fetchFields',{
@@ -30,6 +28,23 @@ const Signup = () => {
     const handleFileUpload = (e) => {
         setFiles(e.target.files[0]);
     };
+
+    
+  const handleDateChange = (e) => {
+    const selectedDateString = e.target.value;
+    const selectedDate = new Date(selectedDateString);
+
+    if (selectedDate < credentials.starting_date) {
+      // Display an error message or prevent further action
+      alert('Please select a date that is not in the past.');
+    } else {
+      setCredentials({ ...credentials, [e.target.name]: e.target.value })
+
+      console.log(selectedDate)
+    }
+  };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -52,6 +67,7 @@ const Signup = () => {
         formData.append('working_field', credentials.working_field)
         formData.append('specialization', credentials.specialization)
         formData.append('internshipPeriod', credentials.internshipPeriod)
+        formData.append('starting_period',credentials.starting_date)
         formData.append('uploadedResume', files)
         try {
             const response = await fetch("http://localhost:5004/api/auth/createuser", {
@@ -246,6 +262,11 @@ const Signup = () => {
                                 <option value="4">4 months</option>
                                 {/* <option value="Dr.">Dr.</option> */}
                             </select>
+                        </div>
+                        <div className="col">
+                            <label htmlFor="exampleInputPassword1">Preferred Date</label>
+                            <input type='date' value={credentials.starting_date} onChange={handleDateChange} required name='starting_date' />
+
                         </div>
 
                     </div>

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import LeftPanel from '../components/LeftPanel';
-import { AiOutlineDownload, AiOutlineClose, AiOutlineEye, AiOutlinePlus} from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineEye} from 'react-icons/ai'
 import {MdDisabledByDefault} from 'react-icons/md'
-import { FiSettings } from 'react-icons/fi'
 import { GrPowerReset } from 'react-icons/gr'
 import { CgProfile } from 'react-icons/cg'
 import { BsFilter } from 'react-icons/bs'

@@ -1,5 +1,4 @@
 import React, { useContext,useEffect, useState } from 'react';
-import Navigation from '../components/Navigation';
 import '../css/MentorScreen.css'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

@@ -58,10 +58,9 @@ router.post('/createuser', upload.single('uploadedResume'), [
   const year = today.getFullYear();
   const month = today.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month
   const day = today.getDate();
-  // const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  const currentDate = moment(formData.date);
-  const estimatedEndDate = currentDate.add(formData.internshipPeriod, 'months');
-  const formattedEndDate = estimatedEndDate.format('YYYY-MM-DD');
+  const startingDate = moment(formData.starting_period); // Use formData.starting_period
+const estimatedEndDate = startingDate.add(formData.internshipPeriod, 'months'); // Use startingDate
+const formattedEndDate = estimatedEndDate.format('YYYY-MM-DD');
 
 
   const currentTimezone = 'Asia/Kolkata';
@@ -92,7 +91,8 @@ router.post('/createuser', upload.single('uploadedResume'), [
       specialization: formData.specialization,
       resume_file_time: exactTime,
       resume_file_path: globalfilePath,
-      period: formattedEndDate
+      period: formattedEndDate,
+      starting_period: formData.starting_period
     })
 
     const notification = {

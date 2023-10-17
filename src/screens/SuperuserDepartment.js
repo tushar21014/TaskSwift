@@ -1,19 +1,24 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LeftPanel from '../components/LeftPanel'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import FirstContext from '../context/firstContext'
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 const SuperuserDepartment = () => {
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
         console.log(credentials)
     }
+    useEffect(() => {
+        AOS.init({ duration: 1000 });
+    }, [])
+    
     const context = useContext(FirstContext);
     const { calltoast } = context;
     const [credentials, setCredentials] = useState({ salutation: "", first_name: "", middle_name: "", last_name: "", email: "", phone: "", address1: "", address2: "", city: "", zipCode: "", state: "", working_field: "", specialization: '', pass: '' });
     const handleSubmit = async (e) => {
-        console.log("I am " , credentials);
         e.preventDefault();
         try {
             const response = await fetch("http://localhost:5004/api/auth/creatementor", {
@@ -62,7 +67,7 @@ const SuperuserDepartment = () => {
                     pauseOnHover
                     theme="colored"
                 />
-                <div className='formDepartmentContainer' style={{ padding: '5vh' }}>
+                <div className='formDepartmentContainer' style={{ padding: '5vh' }} data-aos="zoom-in">
                 <div className='heading text-center'><h2>Create New Department</h2></div>
                     <form method="post" style={{ width: '75vw', margin: 'auto' }} onSubmit={handleSubmit} >
                         <hr className="hr-text " data-content='Mentor Details' />

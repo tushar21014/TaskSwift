@@ -135,6 +135,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    starting_period:{
+        type: String,
+        required: true
+    },
     isExpired:{
         type:Boolean,
         default:false

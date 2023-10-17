@@ -63,7 +63,7 @@ const Login = () => {
         Cookies.set('auth-Token', json.authToken)
         // Cookies.set('working_field', json.working_field);
         Cookies.set('role', json.role);
-        navigate('/Superuser');
+        navigate('/Managerusers');
 
       }
     } catch (error) {

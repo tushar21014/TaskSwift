@@ -186,7 +186,7 @@ const MentorHomescreen = () => {
       setIdleInterns(data.idleresponse);
       setBusyInterns(data.engagedresponse);
       setMentorNotifications(data.mentorNotification['notifications'])
-      console.log(data.mentorNotification['notifications']);
+      console.log(data.idleresponse);
 
       // fetchLasttask(data.engagedresponse);
     } catch (error) {
@@ -620,7 +620,7 @@ const MentorHomescreen = () => {
                   </div>
                   <div className='col mentorHomescreen-col' data-aos='fade-up' data-aos-delay='50'>
                     <div className='idle-interns-heading'>IDLE INTERNS ({idleInterns.length})</div>
-                    {busyInterns.length === 0 ? <>
+                    {idleInterns.length === 0 ? <>
                       <div className='pl-3'>No Idle interns</div>
                     </> : <>
                     {/* </>} */}

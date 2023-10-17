@@ -1,11 +1,11 @@
 import React from 'react'
-import Superuserdashboard from '../screens/Superuserdashboard';
+import SuperuserManageusers from '../screens/SuperuserManageusers';
 
 const Superuser = () => {
 
   return (
 <div>
-    <Superuserdashboard/>
+    <SuperuserManageusers/>
 </div>
   )
 }
