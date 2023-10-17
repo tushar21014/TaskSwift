@@ -71,7 +71,11 @@ router.put('/directorAcceptintern', async (req, res) => {
             secure: false,
             auth: {
                 user: 'cdac@gmail.com',
+<<<<<<< HEAD
                 pass: 'cdac password'
+=======
+                pass: 'your password'
+>>>>>>> 48124fe391766d0e1b24eaf46a821700b2c94438
             }
         });
 
