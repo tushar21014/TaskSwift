@@ -96,5 +96,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Special thanks to the mentors, directors, and interns who provided valuable feedback and support.
 
 ---
-
-Feel free to customize this README to suit your project's specific details and requirements. Additionally, you can include information about API endpoints, project structure, deployment instructions, and any other relevant details to help users understand and use your system effectively.
