@@ -82,6 +82,22 @@ Before running the TaskSwift, ensure you have the following software and tools i
 
 3. Begin managing interns, assigning tasks, and monitoring their progress.
 
+## Screenshot
+### Login
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_login.png?raw=true" width="100%"/>
+
+### Analysis
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
+
+### Sign Up 
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_signUp.png?raw=true" width="100%"/>
+
+
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
+
+
+
 ## Contributing
 
 Contributions to the TaskSwift are welcome. Please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
@@ -89,6 +105,9 @@ Contributions to the TaskSwift are welcome. Please follow the guidelines in the 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+
+
 
 ## Acknowledgments
 
