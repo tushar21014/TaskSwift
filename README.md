@@ -1,8 +1,8 @@
-# CDAC Intern Management System
+# TaskSwift
 
 ## Project Description
 
-The CDAC Intern Management System is a web application built using the MERN (MongoDB, Express, React, Node.js) stack. It is designed to facilitate the management of interns by Mentors, Directors, and Superusers. The system allows authorized users to:
+The TaskSwift is a web application built using the MERN (MongoDB, Express, React, Node.js) stack. It is designed to facilitate the management of interns by Mentors, Directors, and Superusers. The system allows authorized users to:
 
 - Create and manage mentor, director, and superuser accounts.
 - Add, edit, and view intern profiles.
@@ -17,7 +17,7 @@ This system provides a centralized platform for efficient communication and coor
 
 ### Prerequisites
 
-Before running the CDAC Intern Management System, ensure you have the following software and tools installed:
+Before running the TaskSwift, ensure you have the following software and tools installed:
 
 - Node.js and npm (Node Package Manager)
 - MongoDB
@@ -84,7 +84,7 @@ Before running the CDAC Intern Management System, ensure you have the following 
 
 ## Contributing
 
-Contributions to the CDAC Intern Management System are welcome. Please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+Contributions to the TaskSwift are welcome. Please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
