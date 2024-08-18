@@ -86,6 +86,9 @@ Before running the TaskSwift, ensure you have the following software and tools i
 ### Login
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_login.png?raw=true" width="100%"/>
 
+### Dashboard 
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/image3.png?raw=true" width="100%"/>
+
 ### Analysis
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
 
