@@ -88,13 +88,12 @@ Before running the TaskSwift, ensure you have the following software and tools i
 
 ### Dashboard 
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/image3.png?raw=true" width="100%"/>
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/image4.png?raw=true" width="100%"/>
+<img src="https://github.com/tushar21014/TaskSwift/blob/main/image5.png?raw=true" width="100%"/>
+
 
 ### Analysis
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
-
-### Sign Up 
-<img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_signUp.png?raw=true" width="100%"/>
-
 
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
 <img src="https://github.com/tushar21014/TaskSwift/blob/main/taskSwift_SuperUserAnalytics.png?raw=true" width="100%"/>
